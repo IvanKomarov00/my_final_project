@@ -18,6 +18,8 @@ Try running the following commands:
 
 This repository delivers an end‑to‑end analytics engineering solution on the Brazilian E‑commerce dataset using BigQuery and dbt.
 
+
+### Disclosure: generated with AI based on Final Project Task description
 ### Project Breakdown
 
 1. **Data Ingestion (Part 1)**  
