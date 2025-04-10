@@ -1,0 +1,127 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Staging model for customer data with cleaned city and state fields."
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer."
+        tests:
+          - unique
+          - not_null
+      - name: customer_unique_id
+        description: "Identifier linking multiple orders from the same customer."
+  - name: stg_order_items
+    description: "Staging model for order items, including type conversions for date fields."
+    columns:
+      - name: order_id
+        description: "Foreign key linking to orders."
+        tests:
+          - not_null
+      - name: product_id
+        description: "Unique identifier for the product ordered."
+        tests:
+          - not_null
+  - name: stg_order_payments
+    description: "Staging model for order payments containing payment details."
+    columns:
+      - name: order_id
+        description: "Foreign key to orders."
+        tests:
+          - not_null
+  - name: stg_orders
+    description: "Staging model for orders with data cleaning and derived columns: delivery_time_days and is_shipped."
+    columns:
+      - name: order_id
+        description: "Unique order identifier."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Foreign key linking to customers."
+        tests:
+          - not_null
+      - name: delivery_time_days
+        description: "Calculated difference in days between order purchase and delivery."
+      - name: is_shipped
+        description: "Boolean flag indicating if the order is shipped or delivered."
+  - name: stg_product_category_name_translation
+    description: "Staging model for product category translations from Portuguese to English."
+    columns:
+      - name: product_category_name
+        description: "Original product category name in Portuguese."
+      - name: product_category_name_english
+        description: "Translated product category name in English."
+  - name: stg_products
+    description: "Staging model for products data with product dimensions and description details."
+    columns:
+      - name: product_id
+        description: "Unique product identifier."
+        tests:
+          - unique
+          - not_null
+  - name: stg_sellers
+    description: "Staging model for sellers data containing seller location details."
+    columns:
+      - name: seller_id
+        description: "Unique identifier for each seller."
+        tests:
+          - unique
+          - not_null
+  - name: fp_sales_full
+    description: "Denormalized, order-level table combining order metadata, items, and payments."
+    columns:
+      - name: order_id
+        description: "Unique order identifier."
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Customer identifier."
+        tests:
+          - not_null
+      - name: delivery_time_days
+        description: "Number of days between order purchase and customer delivery."
+      - name: total_paid
+        description: "Total payment amount for the order."
+  - name: fp_order_performance
+    description: "Daily and monthly order counts and revenue, broken down by order status."
+    columns:
+      - name: period_date
+        description: "Date or month for the period."
+      - name: period
+        description: "Either 'daily' or 'monthly'."
+      - name: orders_count
+        description: "Number of orders in the period."
+      - name: revenue
+        description: "Total revenue in the period."
+      - name: order_status
+        description: "Order status (e.g., delivered, canceled)."
+  - name: fp_customer_behavior
+    description: "Customer metrics: new vs. returning, total orders, lifetime value, and average order value."
+    columns:
+      - name: customer_id
+        description: "Unique customer identifier."
+        tests:
+          - not_null
+      - name: customer_type
+        description: "Indicates if the order was the customer's first ('new') or subsequent ('returning')."
+      - name: total_orders
+        description: "Total number of orders per customer."
+      - name: lifetime_value
+        description: "Sum of total_paid across all orders for the customer."
+      - name: avg_order_value
+        description: "Average total_paid per order for the customer."
+  - name: fp_payment_analysis
+    description: "Monthly trends in payment methods, including counts, average installments, and revenue by method."
+    columns:
+      - name: period_month
+        description: "Month of the payments."
+      - name: payment_type
+        description: "Type of payment method."
+      - name: payment_count
+        description: "Number of payments made with this method in the period."
+      - name: avg_installments
+        description: "Average number of installments used."
+      - name: revenue_by_method
+        description: "Total revenue paid via this method."

@@ -1,0 +1,127 @@
+version: 2
+
+sources:
+  - name: i_komarov
+    schema: I_komarov
+    tables:
+      - name: fp_customers_dataset
+        description: "Customer information imported from olist_customers_dataset.csv."
+        columns:
+          - name: customer_id
+            description: "Unique identifier for each customer."
+            tests:
+              - unique
+              - not_null
+          - name: customer_unique_id
+            description: "Identifier linking multiple orders from the same customer."
+          - name: customer_zip_code_prefix
+            description: "Prefix of the customer's zip code."
+          - name: customer_city
+            description: "City where the customer resides."
+          - name: customer_state
+            description: "State of the customer's address."
+      - name: fp_order_items_dataset
+        description: "Order items details imported from olist_order_items_dataset.csv."
+        columns:
+          - name: order_id
+            description: "Identifier linking the item to the order."
+            tests:
+              - not_null
+          - name: order_item_id
+            description: "Sequential number for items within an order."
+          - name: product_id
+            description: "Unique identifier of the product ordered."
+            tests:
+              - not_null
+          - name: seller_id
+            description: "Seller fulfilling the order item."
+          - name: shipping_limit_date
+            description: "Deadline for shipping the item."
+          - name: price
+            description: "Price for the order item."
+          - name: freight_value
+            description: "Shipping fee for the order item."
+      - name: fp_order_payments_dataset
+        description: "Payment records imported from olist_order_payments_dataset.csv."
+        columns:
+          - name: order_id
+            description: "Link to the corresponding order."
+            tests:
+              - not_null
+          - name: payment_sequential
+            description: "Sequential identifier for payments."
+          - name: payment_type
+            description: "Type of payment (e.g., credit card, boleto, etc.)."
+          - name: payment_installments
+            description: "Number of payment installments."
+          - name: payment_value
+            description: "Total payment amount."
+      - name: fp_orders_dataset
+        description: "Order metadata imported from olist_orders_dataset.csv."
+        columns:
+          - name: order_id
+            description: "Unique order identifier."
+            tests:
+              - unique
+              - not_null
+          - name: customer_id
+            description: "Reference to the customer placing the order."
+            tests:
+              - not_null
+          - name: order_status
+            description: "Status of the order (e.g., delivered, shipped, canceled)."
+          - name: order_purchase_timestamp
+            description: "Timestamp when the order was placed."
+          - name: order_approved_at
+            description: "Timestamp when the order was approved."
+          - name: order_delivered_carrier_date
+            description: "Date when the order was dispatched by the carrier."
+          - name: order_delivered_customer_date
+            description: "Date when the order reached the customer."
+          - name: order_estimated_delivery_date
+            description: "Estimated delivery date."
+      - name: fp_product_category_name_translation
+        description: "Product category translations imported from product_category_name_translation.csv."
+        columns:
+          - name: product_category_name
+            description: "Original product category name (in Portuguese)."
+          - name: product_category_name_english
+            description: "Translated product category name in English."
+      - name: fp_products_dataset
+        description: "Product details imported from olist_products_dataset.csv."
+        columns:
+          - name: product_id
+            description: "Unique identifier for each product."
+            tests:
+              - unique
+              - not_null
+          - name: product_category_name
+            description: "Category the product belongs to."
+          - name: product_name_length
+            description: "Character count of the product name."
+          - name: product_description_length
+            description: "Character count of the product description."
+          - name: product_photos_qty
+            description: "Number of product photos."
+          - name: product_weight_g
+            description: "Product weight in grams."
+          - name: product_length_cm
+            description: "Product length in centimeters."
+          - name: product_height_cm
+            description: "Product height in centimeters."
+          - name: product_width_cm
+            description: "Product width in centimeters."
+      - name: fp_sellers_dataset
+        description: "Seller information imported from olist_sellers_dataset.csv."
+        columns:
+          - name: seller_id
+            description: "Unique identifier for each seller."
+            tests:
+              - unique
+              - not_null
+          - name: seller_zip_code_prefix
+            description: "Seller's location zip code prefix."
+          - name: seller_city
+            description: "City where the seller is based."
+          - name: seller_state
+            description: "State of the seller."
